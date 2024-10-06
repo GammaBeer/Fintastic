@@ -1,0 +1,49 @@
+@media (max-width :900px) {
+    .navbar {
+        padding: 20px 8%;
+    }
+    .navbar button{
+        gap:8px;
+        padding:8px 18px;
+        font-size:14px;
+    }
+}
+@media (max-width :768px) {
+    .navbar {
+        padding: 20px 5%;
+    }
+    .navbar ul{
+        display: none;
+    }
+}
+
+.navbar-profile {
+    position: relative; /* Make the profile container a positioned element */
+  }
+  
+  .navbar-profile-dropdown {
+    display: none; /* Hide the dropdown by default */
+    position: absolute; /* Position it relative to the parent */
+    top: 100%; /* Place the dropdown right below the navbar-profile container */
+    /* right: 0;  */
+    /* Align it to the right */
+    background-color: white;
+    /* padding: 0 30px; */
+    border-radius: 5px;
+    /* border: 1px solid #09005c; */
+    /* outline: 2px solid white; */
+    z-index: 10; /* Make sure it’s on top */
+  }
+  
+  .navbar-profile:hover .navbar-profile-dropdown {
+    display: flex; /* Show the dropdown on hover */
+    flex-direction: column;
+    gap: 10px;
+    border: 1px solid black;
+  }
+  
+
+  .navbar-profile-dropdown li:hover {
+    text-decoration: underline; /* Add hover effect for dropdown items */
+  }
+  
