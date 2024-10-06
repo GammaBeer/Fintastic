@@ -2,6 +2,8 @@
 
 **A virtual Marketplace to buy,sell,track cryptos in simulation**
 
+[View here](https://fintasticbygamma.netlify.app/)
+
 Tech used - ReactJs,NodeJs,Tailwind CSS
 
 ***Currently in development phase***
