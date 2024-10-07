@@ -1,3 +1,4 @@
+// import { set } from "mongoose";
 import { createContext } from "react";
 import { useState,useEffect } from "react";
 
@@ -41,7 +42,7 @@ const CoinContextProvider=(props)=>{
         setCurrency,
         url,
         token,
-        setToken
+        setToken,
     }
 
     return (

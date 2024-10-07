@@ -8,25 +8,33 @@ const createToken=(id)=>{
     return jwt.sign({id},process.env.JWT_SECRET)
 } 
 
-const loginUser = async (req, res) => {
-    const {email,password}=req.body;
+const createSessionToken = (user) => {
+    const payload = { name: user.name, email: user.email };
+    return jwt.sign(payload, process.env.JWT_SECRET,); // You can set the expiration time
+  };
+  
+  const loginUser = async (req, res) => {
+    const { email, password } = req.body;
     try {
-        const user=await userModel.findOne({email});
-        if(!user){
-            return res.json({success:false,message:"User not found"});
-        }
-        const isMatch=await bcrypt.compare(password,user.password);
-        if(!isMatch){
-            return res.json({success:false,message:"Invalid credentials"});
-        }
-        const token=createToken(user._id);
-        res.json({success:true,token});
-        
+      const user = await userModel.findOne({ email });
+      if (!user) {
+        return res.json({ success: false, message: "User not found" });
+      }
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return res.json({ success: false, message: "Invalid credentials" });
+      }
+  
+      const token = createToken(user._id);  // JWT for authentication
+      const sessionToken = createSessionToken(user);  // New session token for user data
+      res.json({ success: true, token, sessionToken });  // Return both tokens
+      
     } catch (error) {
-        console.log(error);
-        return res.json({success:false,message:"Internal server error"});
+      console.log(error);
+      return res.json({ success: false, message: "Internal server error" });
     }
-}
+  };
+  
 
 const registerUser = async (req, res) => {
     const {name,password,email}=req.body;
@@ -52,10 +60,11 @@ const registerUser = async (req, res) => {
             email:email,
             password:hashedpassword
         });
-
+        
         const user=await newUser.save()
         const token=createToken(user._id);
-        res.json({success:true,token});
+        const sessionToken = createSessionToken(user);
+        res.json({success:true,token,sessionToken});
 
     } catch (error) {
         console.log(error);
@@ -63,4 +72,4 @@ const registerUser = async (req, res) => {
     }
 }
 
-export { loginUser, registerUser };
+export { loginUser, registerUser};

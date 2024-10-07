@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
 import { CoinContext } from "../../context/CoinContext.jsx";
 import axios from "axios";
 
@@ -29,15 +28,14 @@ const UserLogin = ({ setShowLogin }) => {
     const response = await axios.post(newUrl, data);
     if (response.data.success) {
       setToken(response.data.token);
-      console.log(data.name);
-      console.log(data.email);
-      console.log(response.data.token);
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("sessionToken", response.data.sessionToken);
       setShowLogin(false);
     } else {
       alert(response.data.message);
     }
   };
+
 
   return (
     <div className="login-popup absolute z-[1] w-full h-full bg-gradient-to-br from-indigo-900 to-slate-800 grid">
