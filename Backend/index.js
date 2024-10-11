@@ -3,7 +3,7 @@ import cors from "cors";
 import connectDB from "./config/db.js";
 import 'dotenv/config';
 import userRouter from "./routes/userRoute.js";
-
+const port =process.env.PORT || 5000;
 
 const app = express(); 
 
@@ -18,8 +18,8 @@ connectDB();
 
 app.use("/api/user", userRouter);
 
-app.listen(process.env.PORT, () => {
-    console.log(`Server is running on port ${process.env.PORT}`);
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
     
 });
 
