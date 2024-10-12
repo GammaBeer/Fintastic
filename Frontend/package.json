@@ -13,6 +13,8 @@
   "dependencies": {
     "axios": "^1.7.7",
     "body-parser": "^1.20.3",
+    "chart.js": "^4.4.4",
+    "chartjs-plugin-zoom": "^2.0.1",
     "cors": "^2.8.5",
     "crypto-price-track": "file:",
     "dotenv": "^16.4.5",
@@ -22,8 +24,11 @@
     "jwt-decode": "^4.0.0",
     "nodemon": "^3.1.7",
     "react": "^18.3.1",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
+    "react-fast-marquee": "^1.6.5",
     "react-google-charts": "^5.1.0",
+    "react-infinite-ticker": "^2.2.0",
     "react-router-dom": "^6.26.2"
   },
   "devDependencies": {

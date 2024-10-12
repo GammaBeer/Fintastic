@@ -75,8 +75,12 @@ const Navbar = ({ setShowLogin }) => {
           <Link to={"/UserWatchList"}>
             <li className="cursor-pointer">Watchlist</li>
           </Link>
-          <li className="cursor-pointer">Pricing</li>
-          <li className="cursor-pointer">Blog</li>
+          <Link to={'/UserTrade'}>
+            <li className="cursor-pointer">Trade</li>
+          </Link>
+          <Link to={'/UserPortfolio'}>
+            <li className="cursor-pointer">Portfolio</li>
+          </Link>
         </ul>
         <div className="nav-right flex items-center gap-[max(1vw,12px)]">
           <select

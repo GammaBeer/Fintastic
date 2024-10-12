@@ -7,6 +7,8 @@ import Coin from "./pages/Coin/Coin.jsx";
 import Footer from "./components/Footer/Footer.jsx";
 import UserLogin from "./pages/UserLogin/UserLogin.jsx";
 import UserWatchlist from "./pages/UserWatchlist/UserWatchlist.jsx";
+import UserTrade from "./pages/UserTrade/UserTrade.jsx";
+import UserPortfolio from "./pages/UserPortfolio/UserPortfolio.jsx";
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
@@ -23,6 +25,9 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/coin/:coinId" element={<Coin />} />
               <Route path="/UserWatchlist" element={<UserWatchlist />} />
+              <Route path="/UserTrade" element={<UserTrade />} />
+              <Route path="/UserTrade/coin/:coinId" element={<UserTrade />} />
+              <Route path="/UserPortfolio" element={<UserPortfolio />} />
             </Routes>
           </main>
 
