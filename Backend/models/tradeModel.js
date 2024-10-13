@@ -8,6 +8,11 @@ const coinHoldingSchema = new mongoose.Schema({
         type: Number,
         required: true,
         min: 0
+    },
+    price:{
+        type: Number,
+        required: true,
+        min: 0
     }
 });
 
@@ -38,8 +43,13 @@ const tradeHistorySchema = new mongoose.Schema({
 });
 const tradeModelSchema= new mongoose.Schema({
     userId: {
-        type: { type: Schema.Types.ObjectId, ref: 'userModel' },
+        type: String,
         required: true
+    },
+    balance: {
+        type: Number,
+        required: true,
+        default: 10000
     },
     currentHoldings: [coinHoldingSchema],
     history: [tradeHistorySchema]

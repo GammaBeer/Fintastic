@@ -1,5 +1,5 @@
-import React, { useEffect,useState } from "react";
-import {jwtDecode} from 'jwt-decode'
+import React, { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 import cryptologo from "../../assets/cryptologo.png";
 import { CoinContext } from "../../context/CoinContext.jsx";
 import { useContext } from "react";
@@ -7,9 +7,10 @@ import "./Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import profileicon from "../../assets/profileicon.png";
 import logout_Icon from "../../assets/logout_Icon.png";
+import axios from "axios";
 
 const Navbar = ({ setShowLogin }) => {
-  const { setCurrency, currency, token, setToken} = useContext(CoinContext);
+  const { setCurrency, currency, token, setToken,balance } = useContext(CoinContext);
   const [username, setUsername] = useState("");
 
   const navigate = useNavigate();
@@ -23,18 +24,23 @@ const Navbar = ({ setShowLogin }) => {
   const decodeSessionToken = (token) => {
     try {
       const decoded = jwtDecode(token);
-      if (decoded && decoded.name) {
-        setUsername(decoded.name); 
+      if (decoded && decoded.name && decoded.email) {
+        setUsername(decoded.name);
       }
     } catch (error) {
       console.error("Error decoding session token:", error);
     }
   };
+
+
   useEffect(() => {
-    const sessionToken = localStorage.getItem("sessionToken");
-    if (sessionToken) {
-      decodeSessionToken(sessionToken);  
-    }
+    const runFunctions = async () => {
+      const sessionToken = localStorage.getItem("sessionToken");
+      if (sessionToken) {
+        await decodeSessionToken(sessionToken);
+      }
+    };
+    runFunctions();
   }, []);
 
   const currencyHandler = (event) => {
@@ -75,10 +81,10 @@ const Navbar = ({ setShowLogin }) => {
           <Link to={"/UserWatchList"}>
             <li className="cursor-pointer">Watchlist</li>
           </Link>
-          <Link to={'/UserTrade/coin/bitcoin'}>
+          <Link to={"/UserTrade/coin/bitcoin"}>
             <li className="cursor-pointer">Trade</li>
           </Link>
-          <Link to={'/UserPortfolio'}>
+          <Link to={"/UserPortfolio"}>
             <li className="cursor-pointer">Portfolio</li>
           </Link>
         </ul>
@@ -112,13 +118,15 @@ const Navbar = ({ setShowLogin }) => {
                 alt="Profile Icon"
                 className="w-10 h-10 rounded-full"
               />
-              <h2 className="text-white">
-                {username}
-              </h2>
-              <ul className="navbar-profile-dropdown absolute hidden ">
+              <h2 className="text-white">{username}</h2>
+              <ul className="navbar-profile-dropdown absolute hidden">
+                <li className="text-black flex flex-col  px-7 py-2 items-center justify-center border-b-black border-b-2">
+                  <p className="text-sm">balance</p>
+                  <div className="text-[24px] font-bold">{balance && currency.symbol + balance.toLocaleString()}</div>
+                </li>
                 <li
                   onClick={logout}
-                  className="cursor-pointer p-2  text-black flex px-7 gap-3 font-semibold"
+                  className="cursor-pointer p-2  text-black flex px-7 gap-3 font-semibold hover:underline justify-center"
                 >
                   <img src={logout_Icon} alt="" className="w-6" />
                   Logout

@@ -1,59 +1,128 @@
 import React, { useContext, useState, useEffect } from "react";
 import { CoinContext } from "../../context/CoinContext.jsx";
+import axios from "axios";
 
 const TradeOrder = ({ coinData }) => {
-  const [activeTab, setActiveTab] = useState("buy"); // Track active tab (Buy/Sell)
-  const [orderType, setOrderType] = useState("Market"); // Track order type (Limit/Market)
-  const [qty, setQty] = useState(""); // Track Quantity input as string
-  const [orderValue, setOrderValue] = useState(""); // Track Order Value input as string
-  const { currency } = useContext(CoinContext);
+  const [activeTab, setActiveTab] = useState("buy");
+  const [orderType, setOrderType] = useState("Market");
+  const [qty, setQty] = useState("");
+  const [orderValue, setOrderValue] = useState("");
+  const { currency, balance, token, email } = useContext(CoinContext);
+  const [currentHoldings, setCurrentHoldings] = useState([]);
 
-  const price = coinData.market_data.current_price[currency.name]; // Get current price in selected currency
+  let price = coinData?.market_data?.current_price[currency.name] || 0;
+  let totalHoldings = 0;
 
+  // Fetch holdings
+  const getHoldings = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/trade/holdings",
+        { email: email }
+      );
+      if (response.data.success) {
+        setCurrentHoldings(response.data.holdings);
+      }
+    } catch (error) {
+      console.error("Error fetching holdings:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (coinData) {
+      getHoldings();
+    }
+  }, [coinData, qty, orderValue]);
+
+  if (currentHoldings.length > 0) {
+    const holdings = currentHoldings.filter(
+      (item) => item.coinId === coinData.id
+    );
+    totalHoldings = holdings.reduce(
+      (sum, holding) => sum + holding.quantity,
+      0
+    );
+  }
+
+  // Handle buying coin
+  const buyCoin = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/trade/buycoin",
+        {
+          email: email,
+          coin: coinData.id,
+          quantity: qty,
+          boughtAt: price,
+          value: orderValue,
+        }
+      );
+      setQty("");
+      setOrderValue("");
+      if (response.data.success) {
+        alert("Coin bought successfully");
+      } else {
+        alert(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error buying coin:", error);
+      alert("An error occurred while buying the coin.");
+    }
+  };
+
+  const sellCoin = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/trade/sellcoin",
+        {
+          email: email,
+          coin: coinData.id,
+          quantity: qty,
+          soldAt: price,
+          value: orderValue,
+        }
+      );
+      setQty("");
+      setOrderValue("");
+      if (response.data.success) {
+        alert("Coin Sold successfully");
+      } else {
+        alert(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error buying coin:", error);
+      alert("An error occurred while buying the coin.");
+    }
+  };
+
+  // Switch between buy/sell tabs
   const switchTab = (tab) => setActiveTab(tab);
   const switchOrderType = (type) => setOrderType(type);
 
-  // Convert the input string to a number (float or integer)
-  const toNumber = (value) => {
-    if (!value) return 0; // Handle empty string input as zero
-    return parseFloat(value); // Convert to float (safe for integers too)
-  };
+  const toNumber = (value) => (value ? parseFloat(value) : 0);
 
-  // Update Order Value when Qty is changed
+  // Update order value based on qty
   useEffect(() => {
-    const numericQty = toNumber(qty); // Convert qty from string to number
+    const numericQty = toNumber(qty);
     if (numericQty > 0) {
-      setOrderValue((numericQty * price).toString()); // Calculate order value based on qty
+      setOrderValue(numericQty * price);
     } else {
-      setOrderValue(""); // Reset if qty is invalid or empty
+      setOrderValue("");
     }
   }, [qty, price]);
 
-  // Update Qty when Order Value is changed
+  // Update qty based on order value
   useEffect(() => {
-    const numericOrderValue = toNumber(orderValue); // Convert order value from string to number
+    const numericOrderValue = toNumber(orderValue);
     if (numericOrderValue > 0) {
-      setQty((numericOrderValue / price).toString()); // Calculate qty based on order value
+      setQty(numericOrderValue / price);
     } else {
-      setQty(""); // Reset if order value is invalid or empty
+      setQty("");
     }
   }, [orderValue, price]);
 
-  // Handle qty input validation (up to 5 decimal places)
-  const handleQtyChange = (e) => {
-    const value = e.target.value;
-    if (/^\d*\.?\d{0,5}$/.test(value)) { // Allow up to 5 decimal places
-      setQty(value);
-    }
-  };
-
-  // Handle order value input validation (up to 2 decimal places)
-  const handleOrderValueChange = (e) => {
-    const value = e.target.value;
-    if (/^\d*\.?\d{0,2}$/.test(value)) { // Allow up to 2 decimal places
-      setOrderValue(value);
-    }
-  };
+  const handleQtyChange = (e) => setQty(e.target.value);
+  const handleOrderValueChange = (e) => setOrderValue(e.target.value);
 
   return (
     <>
@@ -97,8 +166,11 @@ const TradeOrder = ({ coinData }) => {
           <div className="text-sm text-gray-300 mb-2">
             Available Balance:{" "}
             <span>
-              ******{" "}
-              {activeTab === "buy" ? `${currency.name}` : `${coinData.symbol}`}
+              {token
+                ? activeTab === "buy"
+                  ? `${balance.toLocaleString()} ${currency.name}`
+                  : `${totalHoldings.toLocaleString()} ${coinData.symbol}`
+                : "---"}
             </span>
           </div>
 
@@ -111,32 +183,28 @@ const TradeOrder = ({ coinData }) => {
                 className="bg-transparent outline-none text-white flex-1"
                 readOnly
               />
-              <span className="text-gray-400">
-                {activeTab === "buy"
-                  ? `${currency.name}`
-                  : `${coinData.symbol}`}
-              </span>
+              <span className="text-gray-400">{currency.name}</span>
             </div>
           )}
 
-          {/* Quantity Input (as string with max 5 decimals) */}
+          {/* Quantity Input */}
           <div className="flex items-center justify-between bg-gray-700 p-2 mb-2 rounded-md">
             <input
               type="text"
               value={qty}
-              onChange={handleQtyChange} // Restrict to 5 decimal places
+              onChange={handleQtyChange}
               placeholder="Qty"
               className="bg-transparent outline-none text-white flex-1"
             />
             <span className="text-gray-400">{coinData.symbol}</span>
           </div>
 
-          {/* Order Value Input (as string with max 2 decimals) */}
+          {/* Order Value Input */}
           <div className="flex items-center justify-between bg-gray-700 p-2 mb-2 rounded-md">
             <input
               type="text"
               value={orderValue}
-              onChange={handleOrderValueChange} // Restrict to 2 decimal places
+              onChange={handleOrderValueChange}
               placeholder="Order Value"
               className="bg-transparent outline-none text-white flex-1"
             />
@@ -145,20 +213,29 @@ const TradeOrder = ({ coinData }) => {
 
           {/* Max buying/selling amount */}
           <div className="text-sm text-gray-300 mb-3">
-            Max. {activeTab === "buy" ? "buying" : "selling"} amount: ******{" "}
-            {activeTab === "buy" ? `${coinData.symbol}` : `${currency.name}`}
+            {activeTab === "buy" &&
+              `Max. buying amount: ${
+                token ? (balance / price).toLocaleString() + " " : "---"
+              } ${coinData.symbol}`}
           </div>
 
           {/* Buy/Sell Button */}
-          <button
-            className={`w-full py-2 rounded-md text-white ${
-              activeTab === "buy" ? "bg-green-500" : "bg-red-500"
-            }`}
-          >
-            {activeTab === "buy"
-              ? `Buy ${coinData.symbol}`
-              : `Sell ${coinData.symbol}`}
-          </button>
+          {token ? (
+            <button
+              className={`w-full py-2 rounded-md text-white ${
+                activeTab === "buy" ? "bg-green-500" : "bg-red-500"
+              }`}
+              onClick={activeTab === "buy" ? buyCoin : sellCoin}
+            >
+              {activeTab === "buy"
+                ? `Buy ${coinData.symbol}`
+                : `Sell ${coinData.symbol}`}
+            </button>
+          ) : (
+            <button className="w-full py-2 rounded-md text-white bg-yellow-600">
+              Login/Register to Trade
+            </button>
+          )}
         </div>
       )}
     </>
