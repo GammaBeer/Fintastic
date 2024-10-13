@@ -1,0 +1,23 @@
+/* Custom scrollbar styles */
+.coin-list::-webkit-scrollbar {
+    width: 8px;
+
+  }
+  
+  .coin-list::-webkit-scrollbar-track {
+    background: #374151; /* Track background */
+    border-radius: 2px;
+  }
+  
+  .coin-list::-webkit-scrollbar-thumb {
+    background-color: grey; /* Scrollbar color */
+    border-radius: 2px;       /* Round shape */  /* Padding around scrollbar for contrast */
+  }
+  
+  /* Fallback for Firefox */
+  .coin-list {
+    scrollbar-color: grey #374151; /* thumb color and track color */
+    scrollbar-width: thin;
+
+  }
+  

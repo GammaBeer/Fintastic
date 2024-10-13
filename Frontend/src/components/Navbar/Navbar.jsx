@@ -75,7 +75,7 @@ const Navbar = ({ setShowLogin }) => {
           <Link to={"/UserWatchList"}>
             <li className="cursor-pointer">Watchlist</li>
           </Link>
-          <Link to={'/UserTrade'}>
+          <Link to={'/UserTrade/coin/bitcoin'}>
             <li className="cursor-pointer">Trade</li>
           </Link>
           <Link to={'/UserPortfolio'}>
