@@ -6,7 +6,7 @@ import validator from "validator";
 
 
 const getWatchlist = async (req, res) => {
-    console.log(req.body);
+
     const {email}=req.body;
     try {
       console.log(email);
@@ -14,8 +14,6 @@ const getWatchlist = async (req, res) => {
       if (!user) {
         return res.json({ success: false, message: "User not found" });
       }
-      console.log(user);
-      console.log(user.watchList);
       res.json({ success: true,watchlist : user.watchList });
       
     } catch (error) {

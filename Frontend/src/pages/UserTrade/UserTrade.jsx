@@ -5,6 +5,7 @@ import { CoinContext } from "../../context/CoinContext.jsx";
 import TradeCoinInfo from "../../components/TradeCoinInfo/TradeCoinInfo.jsx";
 import { useParams } from "react-router-dom";
 import TradeDropdownMenu from "../../components/TradeDropdownMenu/TradeDropdownMenu.jsx";
+import TradeOrder from "../../components/TradeOrder/TradeOrder.jsx";
 
 const UserTrade = () => {
   const { currency } = useContext(CoinContext);
@@ -58,7 +59,7 @@ const UserTrade = () => {
         </div>
         <div className="trade-area w-[26%] ">
           <div className="trade-container w-full h-full bg-gray-800 rounded-sm">
-            Buy/Selling Goes here
+            <TradeOrder coinData={coinData}/>
           </div>
         </div>
       </div>
