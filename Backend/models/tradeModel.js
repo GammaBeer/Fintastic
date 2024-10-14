@@ -26,10 +26,11 @@ const tradeHistorySchema = new mongoose.Schema({
         required: true,
         min: 0
     },
-    price: {
+    boughtAt: {
         type: Number,
-        required: true,
-        min: 0
+    },
+    soldAt: {
+        type: Number,
     },
     tradeType: {
         type: String,
@@ -38,7 +39,7 @@ const tradeHistorySchema = new mongoose.Schema({
     },
     tradeDate: {
         type: Date,
-        default: Date.now
+        default: Date.now()
     }
 });
 const tradeModelSchema= new mongoose.Schema({

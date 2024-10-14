@@ -130,9 +130,9 @@ const UserLogin = ({ setShowLogin }) => {
       </div>
       <div
         onClick={() => setShowLogin(false)}
-        className="text-center items-center mx-auto text-white text-[30px] font-bold cursor-pointer  bg-pink-800 w-[300px] h-[50px] rounded-3xl"
+        className="text-center items-center mx-auto text-white text-[30px] font-bold cursor-pointer  bg-pink-800 w-[300px] h-[50px] rounded-3xl shadow-sm shadow-white "
       >
-        Back to Home Page
+        Click to Home Page
       </div>
     </div>
   );

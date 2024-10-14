@@ -64,6 +64,10 @@ const Navbar = ({ setShowLogin }) => {
     }
   };
 
+  useEffect(()=>{
+
+  },[token,balance])
+
   return (
     <>
       <div className="navbar flex items-center justify-between p-[20px] px-[10%] text-[#ddd] border-b-[2px] border-solid border-[#3c3c3c]">

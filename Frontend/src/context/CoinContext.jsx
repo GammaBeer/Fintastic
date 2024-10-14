@@ -52,12 +52,12 @@ const CoinContextProvider = (props) => {
       { email: email }
     );
     if (response.data.success) {
-      setBalance(response.data.balance);
+      setBalance(response.data.balance);  
     }
   };
   useEffect(() => {
     getBalance();
-  }, [email,balance]);
+  }, [email,balance,token]);
 
   useEffect(() => {
     async function loadData() {

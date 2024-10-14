@@ -32,7 +32,7 @@ const buyCoin=async(req,res)=>{
             {
                 coinId:coin,
                 quantity:quantity,
-                price:boughtAt,
+                boughtAt:boughtAt,
                 tradeType:"buy",
                 tradeDate:Date.now()
             }
@@ -73,15 +73,35 @@ const sellCoin = async (req, res) => {
 
         // Reduce quantity from holdings, using a FIFO strategy
         let remainingQuantityToSell = quantity;
+        let sellHistory = []; // To store sold history with original boughtAt price
+
         for (let holding of holdings) {
             if (remainingQuantityToSell <= 0) break;
-            
+
             if (holding.quantity <= remainingQuantityToSell) {
                 // Sell all of this holding
+                sellHistory.push({
+                    coinId: coin,
+                    quantity: holding.quantity,
+                    boughtAt: holding.price, // Capture the price when this quantity was bought
+                    soldAt: soldAt,
+                    tradeType: "sell",
+                    tradeDate: Date.now(),
+                });
+
                 remainingQuantityToSell -= holding.quantity;
                 holding.quantity = 0; // Mark as fully sold
             } else {
                 // Partially sell from this holding
+                sellHistory.push({
+                    coinId: coin,
+                    quantity: remainingQuantityToSell,
+                    boughtAt: holding.price, // Capture the price when this quantity was bought
+                    soldAt: soldAt,
+                    tradeType: "sell",
+                    tradeDate: Date.now(),
+                });
+
                 holding.quantity -= remainingQuantityToSell;
                 remainingQuantityToSell = 0; // All required quantity has been sold
             }
@@ -89,16 +109,14 @@ const sellCoin = async (req, res) => {
 
         // Remove holdings where quantity is zero (fully sold holdings)
         trade.currentHoldings = trade.currentHoldings.filter(holding => holding.quantity > 0);
-        trade.history.push({
-            coinId: coin,
-            quantity: quantity,
-            price: soldAt,
-            tradeType: "sell",
-            tradeDate: Date.now(),
-        });
 
+        // Add all sell transactions to the trade history
+        trade.history.push(...sellHistory);
+
+        // Update the user's balance
         trade.balance = trade.balance + value;
 
+        // Save the updated trade document
         await trade.save();
 
         res.json({ success: true, message: "Coin sold successfully" });

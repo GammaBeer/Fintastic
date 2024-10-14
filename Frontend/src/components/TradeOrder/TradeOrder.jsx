@@ -7,7 +7,7 @@ const TradeOrder = ({ coinData }) => {
   const [orderType, setOrderType] = useState("Market");
   const [qty, setQty] = useState("");
   const [orderValue, setOrderValue] = useState("");
-  const { currency, balance, token, email } = useContext(CoinContext);
+  const { currency, balance, token, email, setBalance } = useContext(CoinContext);
   const [currentHoldings, setCurrentHoldings] = useState([]);
 
   let price = coinData?.market_data?.current_price[currency.name] || 0;
@@ -61,6 +61,9 @@ const TradeOrder = ({ coinData }) => {
       setOrderValue("");
       if (response.data.success) {
         alert("Coin bought successfully");
+
+        // Fetch the updated balance after buying
+        setBalance(await fetchUpdatedBalance());
       } else {
         alert(response.data.message);
       }
@@ -70,6 +73,7 @@ const TradeOrder = ({ coinData }) => {
     }
   };
 
+  // Handle selling coin
   const sellCoin = async () => {
     try {
       const response = await axios.post(
@@ -86,12 +90,15 @@ const TradeOrder = ({ coinData }) => {
       setOrderValue("");
       if (response.data.success) {
         alert("Coin Sold successfully");
+
+        // Fetch the updated balance after selling
+        setBalance(await fetchUpdatedBalance());
       } else {
         alert(response.data.message);
       }
     } catch (error) {
-      console.error("Error buying coin:", error);
-      alert("An error occurred while buying the coin.");
+      console.error("Error selling coin:", error);
+      alert("An error occurred while selling the coin.");
     }
   };
 
@@ -123,6 +130,20 @@ const TradeOrder = ({ coinData }) => {
 
   const handleQtyChange = (e) => setQty(e.target.value);
   const handleOrderValueChange = (e) => setOrderValue(e.target.value);
+
+  // Function to fetch the updated balance
+  const fetchUpdatedBalance = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/trade/checkBalance",
+        { email: email }
+      );
+      return response.data.success ? response.data.balance : balance;
+    } catch (error) {
+      console.error("Error fetching updated balance:", error);
+      return balance;
+    }
+  };
 
   return (
     <>

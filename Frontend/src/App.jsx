@@ -30,8 +30,6 @@ function App() {
               <Route path="/UserPortfolio" element={<UserPortfolio />} />
             </Routes>
           </main>
-
-          {/* Footer */}
           <Footer />
         </div>
       )}
