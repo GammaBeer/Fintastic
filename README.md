@@ -13,4 +13,4 @@ Phase 1 : Only Track Cryptos using CoinGecko API (done) ✅
 
 Phase 2 : Add User Authentication , Watch List (done) ✅
 
-Phase 3 : Add Virtual Money Balance,Buy,Sell(to be Done) ⏳
+Phase 3 : Add Virtual Money Balance,Buy,Sell(90 % Done,to fix minor errors) ✅
