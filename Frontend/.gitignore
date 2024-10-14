@@ -29,4 +29,6 @@ dist-ssr
 # dependencies
 /node_modules
 
+TODO.txt
+
 .VSCodeCounter
