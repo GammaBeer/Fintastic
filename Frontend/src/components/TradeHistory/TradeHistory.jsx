@@ -85,18 +85,43 @@ const TradeHistory = () => {
                       {time.substring(0, 5) + time.substring(8, 11)}
                       {/* {console.log(time)}                      } */}
                     </p>
-                    <p className="text-[15px] font-bold"><span className={trade.tradeType==='buy' ? `text-green-600` : `text-red-500`}>{trade.tradeType.toUpperCase()}</span></p>
+                    <p className="text-[15px] font-bold">
+                      <span
+                        className={
+                          trade.tradeType === "buy"
+                            ? `text-green-600`
+                            : `text-red-500`
+                        }
+                      >
+                        {trade.tradeType.toUpperCase()}
+                      </span>
+                    </p>
                   </div>
                   <div className="name-and-qty flex justify-between items-center">
                     <p className="font-medium text-[17px]">{trade.coinId}</p>
-                    <p className="text-[14px] font-semibold"><span className={trade.tradeType==='buy' ? `h-[7px] w-[7px] bg-green-500 inline-block rounded-full items-center justify-center` : `h-[7px] w-[7px] bg-red-500 inline-block rounded-full items-center justify-center`}></span>{" "+trade.quantity} qty</p>
+                    <p className="text-[14px] font-semibold">
+                      <span
+                        className={
+                          trade.tradeType === "buy"
+                            ? `h-[7px] w-[7px] bg-green-500 inline-block rounded-full items-center justify-center`
+                            : `h-[7px] w-[7px] bg-red-500 inline-block rounded-full items-center justify-center`
+                        }
+                      ></span>
+                      {" " + trade.quantity} qty
+                    </p>
                   </div>
-                  <div className="price flex justify-end">
-                    <p className="text-right text-gray-600">
-                      {currency.symbol}
+                  <div className="price flex justify-between">
+                    <p className="text-gray-600">
+                      {`at ${currency.symbol}`}
                       {trade.tradeType === "buy"
-                        ? trade.boughtAt
-                        : trade.soldAt}
+                        ? `${trade.boughtAt}`
+                        : `${trade.soldAt}`}
+                    </p>
+                    <p className="text-yellow-600 font-medium">
+                    {`${currency.symbol}`}
+                      {trade.tradeType === "buy"
+                        ? (trade.boughtAt * trade.quantity).toFixed(2)
+                        : (trade.soldAt * trade.quantity).toFixed(2)}
                     </p>
                   </div>
                 </div>

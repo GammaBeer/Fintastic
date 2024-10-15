@@ -82,16 +82,16 @@ const Navbar = ({ setShowLogin }) => {
         </Link>
         <ul className="flex gap-10 list-none font-medium text-[17px]">
           <Link to={"/"}>
-            <li className="cursor-pointer">Home</li>
+            <li className="cursor-pointer hover:underline">Home</li>
           </Link>
           <Link to={"/UserWatchList"}>
-            <li className="cursor-pointer">Watchlist</li>
+            <li className="cursor-pointer hover:underline">Watchlist</li>
           </Link>
           <Link to={"/UserTrade/coin/bitcoin"}>
-            <li className="cursor-pointer">Trade</li>
+            <li className="cursor-pointer hover:underline">Trade</li>
           </Link>
           <Link to={"/UserPortfolio"}>
-            <li className="cursor-pointer">Portfolio</li>
+            <li className="cursor-pointer hover:underline">Portfolio</li>
           </Link>
         </ul>
         <div className="nav-right flex items-center gap-[max(1vw,12px)]">
