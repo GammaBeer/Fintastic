@@ -1,0 +1,24 @@
+/* Custom scrollbar styles */
+.holdings-list::-webkit-scrollbar {
+    width: 10px;
+
+  }
+  
+  .holdings-list::-webkit-scrollbar-track {
+    background: #374151; /* Track background */
+    border-radius: 2px;
+  }
+  
+  .holdings-list::-webkit-scrollbar-thumb {
+    background-color: black; /* Scrollbar color */
+    border-radius: 10px;
+           /* Round shape */  /* Padding around scrollbar for contrast */
+  }
+  
+  /* Fallback for Firefox */
+  .holdings-list {
+    scrollbar-color: grey #171717; /* thumb color and track color */
+    scrollbar-width: thin;
+    scrollbar-3dlight-color: #171717;
+  }
+  

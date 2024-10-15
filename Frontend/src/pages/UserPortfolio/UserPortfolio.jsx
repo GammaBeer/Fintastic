@@ -12,10 +12,10 @@ const UserPortfolio = () => {
     <>
       {token ?
         <div className="main-page flex">
-          <div className="holdings-area w-[50%] p-4">
+          <div className="holdings-area w-[50%] p-4 m-4">
             <CurrentHoldings />
           </div>
-          <div className="history-area w-[50%] p-4">
+          <div className="history-area w-[50%] p-4 m-4">
             <TradeHistory />
           </div>
         </div>

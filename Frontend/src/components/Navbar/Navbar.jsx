@@ -7,6 +7,8 @@ import "./Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import profileicon from "../../assets/profileicon.png";
 import logout_Icon from "../../assets/logout_Icon.png";
+import Logo from "../../assets/Logo.png";
+import svgLogo from "../../../public/svgLogo.svg";
 import axios from "axios";
 
 const Navbar = ({ setShowLogin }) => {
@@ -75,7 +77,7 @@ const Navbar = ({ setShowLogin }) => {
           <img
             src={cryptologo}
             alt=""
-            className="[200px] h-[50px] rounded-lg"
+            className="[200px] h-[55px] rounded-lg"
           />
         </Link>
         <ul className="flex gap-10 list-none font-medium text-[17px]">

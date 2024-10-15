@@ -12,13 +12,16 @@ import UserPortfolio from "./pages/UserPortfolio/UserPortfolio.jsx";
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
+  // bg-gradient-to-tl from-neutral-900 to-neutral-900
+  // bg-gradient-to-br from-indigo-900 to-slate-800
+  // bg-gradient-to-tl from-stone-800 to-slate-800
 
   return (
     <>
       {showLogin ? (
         <UserLogin setShowLogin={setShowLogin} />
       ) : (
-        <div className="app min-h-screen flex flex-col bg-gradient-to-br from-indigo-900 to-slate-800 text-white">
+        <div className="app min-h-screen flex flex-col bg-gradient-to-tl from-stone-800 to-slate-800 text-white">
           <Navbar setShowLogin={setShowLogin} />
           <main className="flex-grow">
             <Routes>
