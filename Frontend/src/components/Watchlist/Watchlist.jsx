@@ -16,7 +16,7 @@ const Watchlist = () => {
     const decoded = jwtDecode(sessionToken);
     console.log(`decoded : ${decoded.email}`);
     const response = await axios.post(
-      "http://localhost:5000/api/user/getWatchlist",
+      "https://fintastic.onrender.com/api/user/getWatchlist",
       { email: decoded.email }
     );
     console.log(response.data);

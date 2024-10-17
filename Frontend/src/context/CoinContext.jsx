@@ -8,7 +8,7 @@ export const CoinContext = createContext();
 
 const CoinContextProvider = (props) => {
   const [token, setToken] = useState("");
-  const url = "http://localhost:5000";
+  const url = "https://fintastic.onrender.com";
   const [allCoins, setAllCoins] = useState([]);
   const [currency, setCurrency] = useState({
     name: "usd",
@@ -48,7 +48,7 @@ const CoinContextProvider = (props) => {
 
   const getBalance = async () => {
     const response = await axios.post(
-      "http://localhost:5000/api/trade/checkBalance",
+      "https://fintastic.onrender.com/api/trade/checkBalance",
       { email: email }
     );
     if (response.data.success) {

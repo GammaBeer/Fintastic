@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { CoinContext } from "../../context/CoinContext.jsx";
 import axios from "axios";
 
-const TradeOrder = ({ coinData ,setShowLogin}) => {
+const TradeOrder = ({ coinData, setShowLogin }) => {
   const [activeTab, setActiveTab] = useState("buy");
   const [orderType, setOrderType] = useState("Market");
   const [qty, setQty] = useState("");
@@ -17,7 +17,7 @@ const TradeOrder = ({ coinData ,setShowLogin}) => {
   const getHoldings = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/trade/holdings",
+        "https://fintastic.onrender.com/api/trade/holdings",
         { email: email }
       );
       if (response.data.success) {
@@ -32,7 +32,7 @@ const TradeOrder = ({ coinData ,setShowLogin}) => {
     if (coinData) {
       getHoldings();
     }
-  }, [coinData, qty, orderValue]);
+  }, [coinData]);
 
   if (currentHoldings.length > 0) {
     const holdings = currentHoldings.filter(
@@ -48,7 +48,7 @@ const TradeOrder = ({ coinData ,setShowLogin}) => {
   const buyCoin = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/trade/buycoin",
+        "https://fintastic.onrender.com/api/trade/buycoin",
         {
           email: email,
           coin: coinData.id,
@@ -77,7 +77,7 @@ const TradeOrder = ({ coinData ,setShowLogin}) => {
   const sellCoin = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/trade/sellcoin",
+        "https://fintastic.onrender.com/api/trade/sellcoin",
         {
           email: email,
           coin: coinData.id,
@@ -106,26 +106,17 @@ const TradeOrder = ({ coinData ,setShowLogin}) => {
   const switchTab = (tab) => setActiveTab(tab);
   const switchOrderType = (type) => setOrderType(type);
 
-  const toNumber = (value) => (value ? parseFloat(value) : 0);
-
-  // Function to format the value with dynamic decimal places based on preceding zeros
-  const formatValue = (value) => {
-    if (value === 0 || !value) return "0";
-
-    let decimalPlaces = 2;
-    if (value < 1) {
-      const leadingZeros = value.toString().split('.')[1]?.match(/^0+/)?.[0]?.length || 0;
-      decimalPlaces = Math.min(5, 2 + leadingZeros);
-    }
-
+  // Function to format numbers for dependent fields (on blur)
+  const formatToFixed = (value, decimalPlaces) => {
+    if (!value || isNaN(value)) return "";
     return parseFloat(value).toFixed(decimalPlaces);
   };
 
   // Update order value based on qty
   useEffect(() => {
-    const numericQty = toNumber(qty);
+    const numericQty = parseFloat(qty);
     if (numericQty > 0) {
-      setOrderValue(formatValue(numericQty * price));
+      setOrderValue((numericQty * price).toString());
     } else {
       setOrderValue("");
     }
@@ -133,9 +124,9 @@ const TradeOrder = ({ coinData ,setShowLogin}) => {
 
   // Update qty based on order value
   useEffect(() => {
-    const numericOrderValue = toNumber(orderValue);
+    const numericOrderValue = parseFloat(orderValue);
     if (numericOrderValue > 0) {
-      setQty(formatValue(numericOrderValue / price));
+      setQty((numericOrderValue / price).toString());
     } else {
       setQty("");
     }
@@ -143,20 +134,6 @@ const TradeOrder = ({ coinData ,setShowLogin}) => {
 
   const handleQtyChange = (e) => setQty(e.target.value);
   const handleOrderValueChange = (e) => setOrderValue(e.target.value);
-
-  // Function to fetch the updated balance
-  const fetchUpdatedBalance = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/api/trade/checkBalance",
-        { email: email }
-      );
-      return response.data.success ? response.data.balance : balance;
-    } catch (error) {
-      console.error("Error fetching updated balance:", error);
-      return balance;
-    }
-  };
 
   return (
     <>
@@ -166,17 +143,13 @@ const TradeOrder = ({ coinData ,setShowLogin}) => {
           <div className="flex mb-4">
             <button
               onClick={() => switchTab("buy")}
-              className={`flex-1 text-sm py-2 ${
-                activeTab === "buy" ? "bg-green-500" : "bg-gray-600"
-              } text-white rounded-l-md`}
+              className={`flex-1 text-sm py-2 ${activeTab === "buy" ? "bg-green-500" : "bg-gray-600"} text-white rounded-l-md`}
             >
               Buy
             </button>
             <button
               onClick={() => switchTab("sell")}
-              className={`flex-1 text-sm py-2 ${
-                activeTab === "sell" ? "bg-red-500" : "bg-gray-600"
-              } text-white rounded-r-md`}
+              className={`flex-1 text-sm py-2 ${activeTab === "sell" ? "bg-red-500" : "bg-gray-600"} text-white rounded-r-md`}
             >
               Sell
             </button>
@@ -185,11 +158,7 @@ const TradeOrder = ({ coinData ,setShowLogin}) => {
           {/* Order Type (Limit/Market/TP-SL) */}
           <div className="flex space-x-2 mb-3 text-yellow-400">
             <button
-              className={`${
-                orderType === "Market"
-                  ? "text-white border-b-2 border-yellow-500"
-                  : ""
-              }`}
+              className={`${orderType === "Market" ? "text-white border-b-2 border-yellow-500" : ""}`}
               onClick={() => switchOrderType("Market")}
             >
               Market
@@ -227,6 +196,7 @@ const TradeOrder = ({ coinData ,setShowLogin}) => {
               type="text"
               value={qty}
               onChange={handleQtyChange}
+              onBlur={() => setQty(formatToFixed(qty, 2))} // Format to 2 decimal places on blur
               placeholder="Qty"
               className="bg-transparent outline-none text-white flex-1"
             />
@@ -239,6 +209,7 @@ const TradeOrder = ({ coinData ,setShowLogin}) => {
               type="text"
               value={orderValue}
               onChange={handleOrderValueChange}
+              onBlur={() => setOrderValue(formatToFixed(orderValue, 2))} // Format to 2 decimal places on blur
               placeholder="Order Value"
               className="bg-transparent outline-none text-white flex-1"
             />
@@ -256,18 +227,15 @@ const TradeOrder = ({ coinData ,setShowLogin}) => {
           {/* Buy/Sell Button */}
           {token ? (
             <button
-              className={`w-full py-2 rounded-md text-white ${
-                activeTab === "buy" ? "bg-green-500" : "bg-red-500"
-              }`}
+              className={`w-full py-2 rounded-md text-white ${activeTab === "buy" ? "bg-green-500" : "bg-red-500"}`}
               onClick={activeTab === "buy" ? buyCoin : sellCoin}
             >
               {activeTab === "buy" ? "Buy" : "Sell"}
             </button>
           ) : (
-            <button 
-              onClick={()=>setShowLogin(true)}
+            <button
+              onClick={() => setShowLogin(true)}
               className="w-full py-2 rounded-md bg-yellow-500 text-black font-bold"
-              // disabled
             >
               Please Login
             </button>

@@ -28,7 +28,7 @@ const Coin = () => {
     console.log(`decoded : ${decoded.email}`);
 
     const response = await axios.post(
-      "http://localhost:5000/api/user/CheckInWatchlist",
+      "https://fintastic.onrender.com/api/user/CheckInWatchlist",
       { email: decoded.email, symbol: symbol }
     );
     console.log(response.data);
@@ -87,7 +87,7 @@ const Coin = () => {
     console.log(`decoded : ${decoded.email}`);
 
     const response = await axios.post(
-      "http://localhost:5000/api/user/addToWatchlist",
+      "https://fintastic.onrender.com/api/user/addToWatchlist",
       { email: decoded.email, symbol: symbol }
     );
     console.log(response.data);
@@ -109,7 +109,7 @@ const Coin = () => {
     console.log(`decoded : ${decoded.email}`);
 
     const response = await axios.post(
-      "http://localhost:5000/api/user/removeFromWatchlist",
+      "https://fintastic.onrender.com/api/user/removeFromWatchlist",
       { email: decoded.email, symbol: symbol }
     );
     console.log(response.data);

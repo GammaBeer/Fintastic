@@ -10,7 +10,7 @@ const TradeHistory = () => {
   const getTradeHistory = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/trade/history",
+        "https://fintastic.onrender.com/api/trade/history",
         { email: email }
       );
       if (response.data.success) {

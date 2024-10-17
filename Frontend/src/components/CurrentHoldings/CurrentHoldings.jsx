@@ -14,7 +14,7 @@ const CurrentHoldings = () => {
   const fetchCurrentHoldings = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/trade/holdings",
+        "https://fintastic.onrender.com/api/trade/holdings",
         { email }
       );
       if (response.data.success) {
