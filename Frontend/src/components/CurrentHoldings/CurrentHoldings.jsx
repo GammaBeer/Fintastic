@@ -27,8 +27,15 @@ const CurrentHoldings = () => {
 
   const getCoinDetails = async (coinId) => {
     try {
+      const options = {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          "x-cg-demo-api-key": import.meta.env.VITE_API_KEY,
+        },
+      };
       const response = await fetch(
-        `https://api.coingecko.com/api/v3/coins/${coinId}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`
+        `https://api.coingecko.com/api/v3/coins/${coinId}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`,options
       );
       const data = await response.json();
       return {
