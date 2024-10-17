@@ -1,6 +1,7 @@
-import React, { useEffect, useState,useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { CoinContext } from "../../context/CoinContext.jsx";
+import "./Trending.css";
 const Trending = () => {
   const [trendingList, setTrendingList] = useState([]);
   const { currency } = useContext(CoinContext);
@@ -19,7 +20,6 @@ const Trending = () => {
       .then((response) => setTrendingList(response.coins))
       .catch((err) => console.error(err));
   };
-  
 
   useEffect(() => {
     fetchTrendingData();
@@ -40,34 +40,45 @@ const Trending = () => {
               <p>Price</p>
               <p className="text-center">24H Change</p>
             </div>
-            {trendingList.map((coin) => (
-              <Link
-                to={`/coin/${coin.item.id}`}
-                className="table-layout grid grid-cols-[3fr_1fr_1fr] py-3 px-5 items-center border-b-[1px] border-b-solid border-b-[#3c3c3c] last:border-none font-medium"
-                key={coin.item.id}
-              >
-                <div className="flex items-center gap-[10px]">
-                  <img src={coin.item.small} alt="" className="w-9" />
-                  <p>{coin.item.name + " (" + coin.item.symbol + ")"}</p>
-                </div>
-                <p>
-                  {currency.symbol}
-                  {coin.item.data.price.toLocaleString()}
-                </p>
-                <p
-                  className={`text-center ${
-                    coin.item.data.price_change_percentage_24h[currency.name] < 0
-                      ? "text-red-500"
-                      : "text-green-500"
-                  }`}
+            <div className="trending-list"
+              style={{
+                maxHeight: "435px", // Set a fixed height for the coin list area
+                overflowY: "auto", // Enable vertical scrolling
+              }}
+            >
+              {trendingList.map((coin) => (
+                <Link
+                  to={`/coin/${coin.item.id}`}
+                  className="table-layout grid grid-cols-[3fr_1fr_1fr] py-3 px-5 items-center border-b-[1px] border-b-solid border-b-[#3c3c3c] last:border-none font-medium"
+                  key={coin.item.id}
                 >
-                  {Math.floor(
-                    coin.item.data.price_change_percentage_24h[currency.name] * 100
-                  ) / 100}
-                  %
-                </p>
-              </Link>
-            ))}
+                  <div className="flex items-center gap-[10px]">
+                    <img src={coin.item.small} alt="" className="w-9" />
+                    <p>{coin.item.name + " (" + coin.item.symbol + ")"}</p>
+                  </div>
+                  <p>
+                    {currency.symbol}
+                    {coin.item.data.price.toLocaleString()}
+                  </p>
+                  <p
+                    className={`text-center ${
+                      coin.item.data.price_change_percentage_24h[
+                        currency.name
+                      ] < 0
+                        ? "text-red-500"
+                        : "text-green-500"
+                    }`}
+                  >
+                    {Math.floor(
+                      coin.item.data.price_change_percentage_24h[
+                        currency.name
+                      ] * 100
+                    ) / 100}
+                    %
+                  </p>
+                </Link>
+              ))}
+            </div>
           </>
         )}
       </div>

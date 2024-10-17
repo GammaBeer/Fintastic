@@ -7,10 +7,11 @@ import { useParams } from "react-router-dom";
 import TradeDropdownMenu from "../../components/TradeDropdownMenu/TradeDropdownMenu.jsx";
 import TradeOrder from "../../components/TradeOrder/TradeOrder.jsx";
 
-const UserTrade = () => {
+const UserTrade = ({setShowLogin}) => {
   const { currency } = useContext(CoinContext);
   const [coinData, setCoinData] = useState(null);  // Initially set to null
   const {coinId}=useParams();
+  const [sym,setSym]=useState(null);
   console.log(coinId);
 
   const fetchCoinData = async () => {
@@ -28,6 +29,7 @@ const UserTrade = () => {
         options
       );
       const data = await response.json();
+      setSym(data.symbol);
       setCoinData(data);  // Set fetched data
     } catch (err) {
       console.error(err);
@@ -49,17 +51,20 @@ const UserTrade = () => {
             <TradeCoinInfo coinData={coinData} />  {/* Pass coinData as prop */}
           </div>
           <div className="coin-analysis flex flex-row w-full h-full gap-1">
-            <div className="coin-chart w-[70%] h-full bg-gray-800 rounded-sm">
-              Chart Goes here
+            <div className="coin-chart w-[100%] h-full bg-gray-800 rounded-sm">
+              {/* Chart Goes here */}
+              {
+                sym && <HistoricChart sym={sym} setSym={setSym}/>
+              }
             </div>
-            <div className="coin-order w-[30%] h-full bg-gray-800 rounded-sm">
+            {/* <div className="coin-order w-[30%] h-full bg-gray-800 rounded-sm">
               Order goes here
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="trade-area w-[26%] ">
           <div className="trade-container w-full h-full bg-gray-800 rounded-sm">
-            <TradeOrder coinData={coinData}/>
+            <TradeOrder coinData={coinData} setShowLogin={setShowLogin}/>
           </div>
         </div>
       </div>

@@ -29,7 +29,7 @@ function App() {
               <Route path="/coin/:coinId" element={<Coin />} />
               <Route path="/UserWatchlist" element={<UserWatchlist />} />
               <Route path="/UserTrade" element={<UserTrade />} />
-              <Route path="/UserTrade/coin/:coinId" element={<UserTrade />} />
+              <Route path="/UserTrade/coin/:coinId" element={<UserTrade  setShowLogin={setShowLogin}/>} />
               <Route path="/UserPortfolio" element={<UserPortfolio />} />
             </Routes>
           </main>

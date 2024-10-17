@@ -1,0 +1,24 @@
+/* Custom scrollbar styles */
+.trending-list::-webkit-scrollbar {
+    width: 10px;
+
+  }
+  
+  .trending-list::-webkit-scrollbar-track {
+    background: #374151; /* Track background */
+    border-radius: 2px;
+  }
+  
+  .trending-list::-webkit-scrollbar-thumb {
+    background-color: black; /* Scrollbar color */
+    border-radius: 10px;
+           /* Round shape */  /* Padding around scrollbar for contrast */
+  }
+  
+  /* Fallback for Firefox */
+  .trending-list {
+    scrollbar-color: gray #1c1917; /* thumb color and track color */
+    scrollbar-width: thin;
+    scrollbar-3dlight-color: #1c1917;
+  }
+  

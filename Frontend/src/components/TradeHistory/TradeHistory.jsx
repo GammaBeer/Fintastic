@@ -37,7 +37,9 @@ const TradeHistory = () => {
           Trade History
         </h1>
         {tradeHistory.length === 0 ? (
-          <>No History yet! Start Investing</>
+          <div className="bg-gradient-to-br from-violet-200 to-green-50 flex rounded-sm p-[100px] text-[25px] items-center justify-center">
+            No History yet! Start Investing
+          </div>
         ) : (
           <div
             className="history-list flex flex-col gap-1"
@@ -63,12 +65,25 @@ const TradeHistory = () => {
                 "December",
               ];
 
-              var s = new Date(trade.tradeDate).toLocaleString(undefined, {
-                timeZone: "Asia/Kolkata",
-              });
-              const [date, time] = s.split(", ");
-              // console.log("date", date);
-              // console.log("tim", date);
+              const tradeDate = new Date(trade.tradeDate).toLocaleString(
+                undefined,
+                { timeZone: "Asia/Kolkata" }
+              );
+              const [date, time] = tradeDate.split(", ");
+
+              // Calculate profit/loss for "sell" trades
+              const profitLoss =
+                trade.tradeType === "sell"
+                  ? (trade.soldAt - trade.boughtAt) * trade.quantity
+                  : 0;
+
+              const profitLossFormatted =
+                profitLoss > 0
+                  ? `+${profitLoss.toFixed(2)}`
+                  : `${profitLoss.toFixed(2)}`;
+
+              const profitLossClass =
+                profitLoss > 0 ? "text-green-500" : "text-red-500";
 
               return (
                 <div
@@ -83,7 +98,6 @@ const TradeHistory = () => {
                   <div className="date-and-tradetype flex justify-between items-center">
                     <p className="text-[14px] font-normal text-gray-800">
                       {time.substring(0, 5) + time.substring(8, 11)}
-                      {/* {console.log(time)}                      } */}
                     </p>
                     <p className="text-[15px] font-bold">
                       <span
@@ -110,7 +124,7 @@ const TradeHistory = () => {
                       {" " + trade.quantity} qty
                     </p>
                   </div>
-                  <div className="price flex justify-between">
+                  <div className="price flex justify-between items-center">
                     <p className="text-gray-600">
                       {`at ${currency.symbol}`}
                       {trade.tradeType === "buy"
@@ -118,10 +132,16 @@ const TradeHistory = () => {
                         : `${trade.soldAt}`}
                     </p>
                     <p className="text-yellow-600 font-medium">
-                    {`${currency.symbol}`}
+                      {`${currency.symbol}`}
                       {trade.tradeType === "buy"
                         ? (trade.boughtAt * trade.quantity).toFixed(2)
                         : (trade.soldAt * trade.quantity).toFixed(2)}
+                      {/* Display profit/loss in parentheses */}
+                      {trade.tradeType === "sell" && (
+                        <span className={`ml-2 ${profitLossClass}`}>
+                          ({profitLossFormatted})
+                        </span>
+                      )}
                     </p>
                   </div>
                 </div>

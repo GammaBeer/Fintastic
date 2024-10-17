@@ -1,0 +1,22 @@
+/* Custom scrollbar styles */
+.watch-list::-webkit-scrollbar {
+  width: 10px;
+}
+
+.watch-list::-webkit-scrollbar-track {
+  background: #374151; /* Track background */
+  border-radius: 2px;
+}
+
+.watch-list::-webkit-scrollbar-thumb {
+  background-color: black; /* Scrollbar color */
+  border-radius: 10px;
+  /* Round shape */ /* Padding around scrollbar for contrast */
+}
+
+/* Fallback for Firefox */
+.watch-list {
+  scrollbar-color: gray #1c1917; /* thumb color and track color */
+  scrollbar-width: thin;
+  scrollbar-3dlight-color: #1c1917;
+}

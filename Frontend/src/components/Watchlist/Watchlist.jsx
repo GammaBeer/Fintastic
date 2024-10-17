@@ -3,6 +3,7 @@ import { CoinContext } from "../../context/CoinContext.jsx";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { Link } from "react-router-dom";
+import './Watchlist.css';
 
 const Watchlist = () => {
   const { token, currency } = useContext(CoinContext);
@@ -77,7 +78,6 @@ const Watchlist = () => {
   useEffect(() => {
     getWatchlist();
     // console.log(watchlist);
-    
   }, []);
 
   // Effect for loading coin data whenever the watchlist changes
@@ -106,36 +106,45 @@ const Watchlist = () => {
                   <p>Price</p>
                   <p className="text-center">24H Change</p>
                 </div>
-                {coinDataList.map((coin) => (
-                  <Link
-                    to={`/coin/${coin.id}`}
-                    className="table-layout grid grid-cols-[3fr_1fr_1fr] py-4 px-5 items-center border-b-[1px] border-b-solid border-b-[#3c3c3c] last:border-none font-medium"
-                    key={coin.id}
-                  >
-                    <div className="flex items-center gap-[10px]">
-                      <img src={coin.image.small} alt="" className="w-9" />
-                      <p>{coin.name + " (" + coin.symbol + ")"}</p>
-                    </div>
-                    <p>
-                      {currency.symbol}
-                      {coin.market_data.current_price[
-                        currency.name
-                      ].toLocaleString()}
-                    </p>
-                    <p
-                      className={`text-center ${
-                        coin.market_data.market_cap_change_percentage_24h < 0
-                          ? "text-red-500"
-                          : "text-green-500"
-                      }`}
+                <div
+                  className="watch-list"
+                  style={{
+                    maxHeight: "435px", // Set a fixed height for the coin list area
+                    overflowY: "auto", // Enable vertical scrolling
+                  }}
+                >
+                  {coinDataList.map((coin) => (
+                    <Link
+                      to={`/coin/${coin.id}`}
+                      className="table-layout grid grid-cols-[3fr_1fr_1fr] py-4 px-5 items-center border-b-[1px] border-b-solid border-b-[#3c3c3c] last:border-none font-medium"
+                      key={coin.id}
                     >
-                      {Math.floor(
-                        coin.market_data.market_cap_change_percentage_24h * 100
-                      ) / 100}
-                      %
-                    </p>
-                  </Link>
-                ))}
+                      <div className="flex items-center gap-[10px]">
+                        <img src={coin.image.small} alt="" className="w-9" />
+                        <p>{coin.name + " (" + coin.symbol + ")"}</p>
+                      </div>
+                      <p>
+                        {currency.symbol}
+                        {coin.market_data.current_price[
+                          currency.name
+                        ].toLocaleString()}
+                      </p>
+                      <p
+                        className={`text-center ${
+                          coin.market_data.market_cap_change_percentage_24h < 0
+                            ? "text-red-500"
+                            : "text-green-500"
+                        }`}
+                      >
+                        {Math.floor(
+                          coin.market_data.market_cap_change_percentage_24h *
+                            100
+                        ) / 100}
+                        %
+                      </p>
+                    </Link>
+                  ))}
+                </div>
               </>
             )}
           </>

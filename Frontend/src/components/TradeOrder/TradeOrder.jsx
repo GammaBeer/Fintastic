@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { CoinContext } from "../../context/CoinContext.jsx";
 import axios from "axios";
 
-const TradeOrder = ({ coinData }) => {
+const TradeOrder = ({ coinData ,setShowLogin}) => {
   const [activeTab, setActiveTab] = useState("buy");
   const [orderType, setOrderType] = useState("Market");
   const [qty, setQty] = useState("");
@@ -108,11 +108,24 @@ const TradeOrder = ({ coinData }) => {
 
   const toNumber = (value) => (value ? parseFloat(value) : 0);
 
+  // Function to format the value with dynamic decimal places based on preceding zeros
+  const formatValue = (value) => {
+    if (value === 0 || !value) return "0";
+
+    let decimalPlaces = 2;
+    if (value < 1) {
+      const leadingZeros = value.toString().split('.')[1]?.match(/^0+/)?.[0]?.length || 0;
+      decimalPlaces = Math.min(5, 2 + leadingZeros);
+    }
+
+    return parseFloat(value).toFixed(decimalPlaces);
+  };
+
   // Update order value based on qty
   useEffect(() => {
     const numericQty = toNumber(qty);
     if (numericQty > 0) {
-      setOrderValue(numericQty * price);
+      setOrderValue(formatValue(numericQty * price));
     } else {
       setOrderValue("");
     }
@@ -122,7 +135,7 @@ const TradeOrder = ({ coinData }) => {
   useEffect(() => {
     const numericOrderValue = toNumber(orderValue);
     if (numericOrderValue > 0) {
-      setQty(numericOrderValue / price);
+      setQty(formatValue(numericOrderValue / price));
     } else {
       setQty("");
     }
@@ -248,13 +261,15 @@ const TradeOrder = ({ coinData }) => {
               }`}
               onClick={activeTab === "buy" ? buyCoin : sellCoin}
             >
-              {activeTab === "buy"
-                ? `Buy ${coinData.symbol}`
-                : `Sell ${coinData.symbol}`}
+              {activeTab === "buy" ? "Buy" : "Sell"}
             </button>
           ) : (
-            <button className="w-full py-2 rounded-md text-white bg-yellow-600">
-              Login/Register to Trade
+            <button 
+              onClick={()=>setShowLogin(true)}
+              className="w-full py-2 rounded-md bg-yellow-500 text-black font-bold"
+              // disabled
+            >
+              Please Login
             </button>
           )}
         </div>

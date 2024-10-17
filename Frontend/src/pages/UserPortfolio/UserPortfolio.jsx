@@ -6,7 +6,7 @@ import { CoinContext } from "../../context/CoinContext.jsx";
 const UserPortfolio = () => {
   const {token} = useContext(CoinContext);
   useEffect(()=>{
-
+    
   },[token]);
   return (
     <>
