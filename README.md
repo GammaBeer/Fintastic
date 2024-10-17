@@ -14,6 +14,12 @@ Tech used - MongoDB,Express,React,Nodejs,Tailwind CSS
 
 Disclaimer : *Errors may occur and will be helpful if you report them*
 
-### GALLERY
+***Credentials for DEMO***
+<br>
+email : lakshaylegend2004@gmail.com
+<br>
+password : 123456789
+
+### GALLERY:
 
 
